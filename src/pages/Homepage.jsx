@@ -122,7 +122,7 @@ export default function HomePage() {
                 />
             )}
 
-            <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+            <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} onToast={showToast} />
             <WishlistPanel isOpen={isWishlistOpen} onClose={() => setIsWishlistOpen(false)} onToast={showToast} />
             <Toast message={toast.message} type={toast.type} isVisible={toast.visible} />
         </>
