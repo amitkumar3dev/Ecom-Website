@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import Header from '../components/Header/Header';
 import ProductsGrid from '../components/ProductsGrid/ProductsGrid';
@@ -35,14 +35,14 @@ export default function HomePage() {
         getHomeData();
     }, []);
 
-    const handleSearch = () => {
-        setSearchTerm(searchInput.trim());
-    };
+    const handleSearch = useCallback((debouncedValue) => {
+        setSearchTerm(debouncedValue.trim());
+    }, []);
 
-    const handleClearSearch = () => {
+    const handleClearSearch = useCallback(() => {
         setSearchInput('');
         setSearchTerm('');
-    };
+    }, []);
 
     const displayedProducts = products.filter((product) => {
         const matchesCategory =

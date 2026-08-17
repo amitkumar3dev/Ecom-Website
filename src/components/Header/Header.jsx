@@ -1,21 +1,30 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import './header.css';
+import { useDebounce } from 'use-debounce';
 
 export default function Header({ searchInput, setSearchInput, handleSearch, handleClearSearch, onCartToggle, onWishlistToggle }) {
   const cartItems = useSelector((state) => state.cart.items);
   const wishlistItems = useSelector((state) => state.wishlist.items);
 
+  const [debouncedSearchInput] = useDebounce(searchInput, 500);
+
+
+  useEffect(() => {
+    if (debouncedSearchInput.trim()) {
+      handleSearch(debouncedSearchInput);
+    } else {
+      handleClearSearch();
+    }
+  }, [debouncedSearchInput, handleSearch, handleClearSearch]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    handleSearch();
   };
 
   const handleInputChange = (event) => {
     const value = event.target.value;
     setSearchInput(value);
-    if (value.trim() === '') {
-      handleClearSearch();
-    }
   };
 
   return (
