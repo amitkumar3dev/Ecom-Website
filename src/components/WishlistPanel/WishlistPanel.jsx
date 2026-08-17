@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleWishlistItem } from '../../store/wishlistSlice';
+import { toggleWishlistItem,clearWishlist } from '../../store/wishlistSlice';
 import { addToCart } from '../../store/cartSlice';
 import './WishlistPanel.css';
 
@@ -24,6 +24,11 @@ export default function WishlistPanel({ isOpen, onClose, onToast }) {
         event.stopPropagation();
         dispatch(toggleWishlistItem(item));
         onToast?.('Removed from wishlist', 'info');
+    };
+
+    const handleClearWishlist = () => {
+        dispatch(clearWishlist());
+        onToast?.('Wishlist cleared', 'info');
     };
 
     if (!isOpen) {
@@ -72,6 +77,7 @@ export default function WishlistPanel({ isOpen, onClose, onToast }) {
                                 </div>
                             </div>
                         ))}
+                    <button type="button" className="clear-wishlist-button" onClick={() => handleClearWishlist()}>Clear wishlist</button>
                     </div>
                 )}
             </aside>
