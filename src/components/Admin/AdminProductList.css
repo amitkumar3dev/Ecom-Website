@@ -1,0 +1,117 @@
+.admin-product-table-wrap {
+  margin-top: 20px;
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(230, 230, 230);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(220, 220, 220, 0.5);
+  overflow: hidden;
+}
+
+.admin-product-table-scroll {
+  overflow-x: auto;
+}
+
+.admin-product-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.admin-product-table thead th {
+  text-align: left;
+  padding: 12px 16px;
+  background-color: rgb(8, 79, 45);
+  color: white;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.admin-product-table tbody td {
+  padding: 10px 16px;
+  border-bottom: 1px solid rgb(235, 235, 235);
+  vertical-align: middle;
+}
+
+.admin-product-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-product-table tbody tr:hover {
+  background-color: rgb(245, 250, 247);
+}
+
+.admin-product-table tbody tr:nth-child(even) {
+  background-color: rgb(250, 250, 250);
+}
+
+.admin-product-table tbody tr:nth-child(even):hover {
+  background-color: rgb(245, 250, 247);
+}
+
+.admin-product-title {
+  font-weight: 600;
+  color: rgb(33, 33, 33);
+}
+
+.admin-product-price {
+  font-weight: 700;
+  color: rgb(8, 79, 45);
+}
+
+.admin-product-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: rgb(228, 228, 228);
+  display: block;
+}
+
+.admin-list-status {
+  margin-top: 20px;
+  padding: 16px;
+  text-align: center;
+  border-radius: 8px;
+  background: rgb(250, 250, 250);
+  border: 1px solid rgb(230, 230, 230);
+  color: rgb(100, 100, 100);
+}
+
+.admin-list-error {
+  color: rgb(200, 35, 35);
+  background: rgb(253, 240, 240);
+  border-color: rgb(240, 200, 200);
+}
+
+.admin-product-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.admin-action-button {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 5px;
+  border: 1px solid rgb(200, 200, 200);
+  background: white;
+  color: rgb(33, 33, 33);
+  cursor: pointer;
+}
+
+.admin-action-button:hover {
+  background-color: rgb(245, 245, 245);
+}
+
+.admin-action-delete {
+  color: rgb(200, 35, 35);
+  border-color: rgb(240, 200, 200);
+}
+
+.admin-action-delete:hover {
+  background-color: rgb(253, 240, 240);
+}

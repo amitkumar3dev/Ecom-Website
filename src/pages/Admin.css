@@ -1,0 +1,51 @@
+.admin-page {
+  max-width: auto;
+  margin: 0 auto;
+  padding: 30px 20px 60px;
+}
+
+.admin-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.admin-page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: rgb(33, 33, 33);
+  margin: 0;
+}
+
+.admin-add-button {
+  background-color: rgb(8, 79, 45);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.admin-add-button:hover {
+  background-color: rgb(6, 63, 36);
+}
+
+@media (max-width: 600px) {
+  .admin-page {
+    padding: 20px 14px 40px;
+  }
+
+  .admin-page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-add-button {
+    width: 100%;
+  }
+}

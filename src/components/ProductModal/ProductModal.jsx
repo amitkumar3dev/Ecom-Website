@@ -1,22 +1,26 @@
-import { useDispatch, useSelector } from 'react-redux';
-import './ProductModal.css';
-import { addToCart } from '../../store/cartSlice';
-import { toggleWishlistItem } from '../../store/wishlistSlice';
+import { useDispatch, useSelector } from "react-redux";
+import "./ProductModal.css";
+import { addToCart } from "../../store/cartSlice";
+import { toggleWishlistItem } from "../../store/wishlistSlice";
 
-export default function ProductModal({ selectedProduct, setSelectedProduct, onToast }) {
-    const dispatch = useDispatch();
-    const wishlistItems = useSelector((state) => state.wishlist.items);
-    const isSaved = wishlistItems.some((item) => item.id === selectedProduct?.id);
+export default function ProductModal({
+  selectedProduct,
+  setSelectedProduct,
+  onToast,
+}) {
+  const dispatch = useDispatch();
+  const wishlistItems = useSelector((state) => state.wishlist.items);
+  const isSaved = wishlistItems.some((item) => item.id === selectedProduct?.id);
 
-    const handleAddToCart = () => {
-        dispatch(addToCart({ product: selectedProduct, quantity: 1 }));
-        onToast?.('Product added to cart', 'success');
-    };
+  const handleAddToCart = () => {
+    dispatch(addToCart({ product: selectedProduct, quantity: 1 }));
+    onToast?.("Product added to cart", "success");
+  };
 
-    const handleWishlistToggle = () => {
-        dispatch(toggleWishlistItem(selectedProduct));
-        onToast?.(isSaved ? 'Removed from wishlist' : 'Saved to wishlist', 'info');
-    };
+  const handleWishlistToggle = () => {
+    dispatch(toggleWishlistItem(selectedProduct));
+    onToast?.(isSaved ? "Removed from wishlist" : "Saved to wishlist", "info");
+  };
 
     return (
         <div className="product-modal" onClick={() => setSelectedProduct(null)}>
@@ -35,4 +39,3 @@ export default function ProductModal({ selectedProduct, setSelectedProduct, onTo
         </div>
     );
 }
-
