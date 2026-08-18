@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { normalizeProduct } from '../utils/productUtils';
+
 const STORAGE_KEY = 'ecom-cart-items';
 
 const loadCartItems = () => {
   try {
     const savedItems = localStorage.getItem(STORAGE_KEY);
-    return savedItems ? JSON.parse(savedItems) : [];
+    return savedItems ? JSON.parse(savedItems).map(normalizeProduct) : [];
   } catch (error) {
     console.error('Could not load cart from localStorage', error);
     return [];
@@ -22,12 +24,13 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const { product, quantity = 1 } = action.payload;
-      const existingItem = state.items.find((item) => item.id === product.id);
+      const normalizedProduct = normalizeProduct(product);
+      const existingItem = state.items.find((item) => item.id === normalizedProduct.id);
 
       if (existingItem) {
         existingItem.quantity += quantity;
       } else {
-        state.items.push({ ...product, quantity });
+        state.items.push({ ...normalizedProduct, quantity });
       }
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));

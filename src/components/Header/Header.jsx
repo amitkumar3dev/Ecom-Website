@@ -1,14 +1,25 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../store/authSlice';
+import { useNavigate } from 'react-router-dom';
 import './header.css';
 import { useDebounce } from 'use-debounce';
 
 export default function Header({ searchInput, setSearchInput, handleSearch, handleClearSearch, onCartToggle, onWishlistToggle }) {
   const cartItems = useSelector((state) => state.cart.items);
   const wishlistItems = useSelector((state) => state.wishlist.items);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
+  const { user, isAuthenticated } = useSelector(
+    (state) => state.auth
+  );
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
+  };
 
   useEffect(() => {
     if (debouncedSearchInput.trim()) {
@@ -27,6 +38,8 @@ export default function Header({ searchInput, setSearchInput, handleSearch, hand
     setSearchInput(value);
   };
 
+  const isMobileSearchOpen = searchInput.length > 0;
+
   return (
     <header className="header">
       <div className="left-section">
@@ -36,7 +49,7 @@ export default function Header({ searchInput, setSearchInput, handleSearch, hand
         </div>
       </div>
 
-      <form className="middle-section" onSubmit={handleSubmit}>
+      <form className={`middle-section ${isMobileSearchOpen ? 'search-open' : ''}`} onSubmit={handleSubmit}>
         <input className="search-bar" type="text" placeholder="Search" value={searchInput} onChange={handleInputChange} />
 
         <button className="search-button" type="submit" aria-label="Search products">
@@ -56,6 +69,22 @@ export default function Header({ searchInput, setSearchInput, handleSearch, hand
           <div className="cart-text">Cart</div>
           {cartItems.length > 0 && <span className="cart-badge">{cartItems.length}</span>}
         </button>
+
+        {isAuthenticated ? (
+          <>
+            <span>Hello, {user.name}</span>
+
+            <button type="button" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <button
+            type="button" className="login-link"
+            onClick={() => navigate('/login')}
+          >
+            Login
+          </button> )}
       </div>
     </header>
   );

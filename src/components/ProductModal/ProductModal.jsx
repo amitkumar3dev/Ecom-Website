@@ -25,11 +25,11 @@ export default function ProductModal({ selectedProduct, setSelectedProduct, onTo
                 <button className="modal-wishlist-button" type="button" onClick={handleWishlistToggle} aria-label="Toggle wishlist">
                     {isSaved ? '♥ Saved' : '♡ Save'}
                 </button>
-                <img className="modal-product-image" src={selectedProduct?.image} alt={selectedProduct?.title} />
+                <img className="modal-product-image" src={selectedProduct?.image ?? selectedProduct?.images?.[0]} alt={selectedProduct?.title} />
                 <h2>{selectedProduct?.title}</h2>
                 <p className="modal-price"> ₹ {selectedProduct?.price}</p>
                 <p className="modal-description"> {selectedProduct?.description}</p>
-                <p className="modal-category"> Category: {selectedProduct?.category}</p>
+                <p className="modal-category"> Category: {selectedProduct?.category ?? 'N/A'}</p>
                 <button className="add-to-cart-button" type="button" onClick={handleAddToCart}>Add to Cart</button>
             </div>
         </div>

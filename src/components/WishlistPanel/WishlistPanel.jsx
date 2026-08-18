@@ -62,7 +62,7 @@ export default function WishlistPanel({ isOpen, onClose, onToast }) {
                                 <div className="wishlist-item-details">
                                     <p className="wishlist-item-name">{item.title}</p>
                                     <p className="wishlist-item-price">₹ {item.price}</p>
-                                    <p className="wishlist-item-category">{item.category}</p>
+                                    <p className="wishlist-item-category">{item.category?.name ?? item.category ?? 'Uncategorized'}</p>
 
                                     <button type="button" className="add-to-cart-button" onClick={(e) => handleAddToCart(item, e)}>
                                         Add to Cart

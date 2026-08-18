@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState, useCallback } from 'react';
 
+import { normalizeProduct } from '../utils/productUtils';
 import Header from '../components/Header/Header';
 import ProductsGrid from '../components/ProductsGrid/ProductsGrid';
 import CategoryFilter from '../components/CategoryFilter/CategoryFilter';
@@ -25,8 +26,9 @@ export default function HomePage() {
     useEffect(() => {
         const getHomeData = async () => {
             try {
-                const response = await axios.get('https://fakestoreapi.com/products');
-                setProducts(response.data);
+                const response = await axios.get('https://api.escuelajs.co/api/v1/products');
+                const normalizedProducts = response.data.map(normalizeProduct);
+                setProducts(normalizedProducts);
             } catch (error) {
                 console.error('Unable to load products:', error);
             }
@@ -45,9 +47,10 @@ export default function HomePage() {
     }, []);
 
     const displayedProducts = products.filter((product) => {
+        const productCategoryName = product.category?.name ?? product.category;
         const matchesCategory =
             selectedCategory === 'all' ||
-            product.category === selectedCategory;
+            productCategoryName === selectedCategory;
 
         const normalizedSearch = searchTerm.toLowerCase();
 
