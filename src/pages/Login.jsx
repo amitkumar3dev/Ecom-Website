@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { login } from '../store/authSlice';
-import { useNavigate } from 'react-router-dom';
-import './Auth.css';
+import { useState } from "react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../store/authSlice";
+import { useNavigate } from "react-router-dom";
+import "./Auth.css";
 
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (event) => {
@@ -28,21 +28,27 @@ export default function Login() {
   const handleLogin = async (event) => {
     event.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const loginResponse = await axios.post('https://api.escuelajs.co/api/v1/auth/login', {
-        email: formData.email,
-        password: formData.password,
-      });
+      const loginResponse = await axios.post(
+        "https://api.escuelajs.co/api/v1/auth/login",
+        {
+          email: formData.email,
+          password: formData.password,
+        },
+      );
 
       const token = loginResponse.data.access_token;
 
-      const profileResponse = await axios.get('https://api.escuelajs.co/api/v1/auth/profile', {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const profileResponse = await axios.get(
+        "https://api.escuelajs.co/api/v1/auth/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       const userFromApi = profileResponse.data;
       const userData = {
@@ -50,14 +56,14 @@ export default function Login() {
         name: userFromApi.name,
         email: userFromApi.email,
         avatar: userFromApi.avatar,
-        role: userFromApi.role?.name ?? userFromApi.role ?? 'Customer',
+        role: userFromApi.role?.name ?? userFromApi.role ?? "Customer",
       };
 
       dispatch(login({ user: userData, token }));
-      navigate('/');
+      navigate("/");
     } catch (err) {
-      console.error('Login failed:', err);
-      setError('Invalid email or password.');
+      console.error("Login failed:", err);
+      setError("Invalid email or password.");
     } finally {
       setLoading(false);
     }
@@ -69,7 +75,7 @@ export default function Login() {
         type="button"
         className="auth-close-button"
         aria-label="Go back to homepage"
-        onClick={() => navigate('/')}
+        onClick={() => navigate("/")}
       >
         ✕
       </button>
@@ -98,12 +104,10 @@ export default function Login() {
         />
 
         <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
+          {loading ? "Logging in..." : "Login"}
         </button>
 
-        <p onClick={() => navigate('/signup')}>
-          New user? Create account
-        </p>
+        <p onClick={() => navigate("/signup")}>New user? Create account</p>
       </form>
     </div>
   );
