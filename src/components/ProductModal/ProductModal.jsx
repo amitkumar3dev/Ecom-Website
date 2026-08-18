@@ -22,44 +22,20 @@ export default function ProductModal({
     onToast?.(isSaved ? "Removed from wishlist" : "Saved to wishlist", "info");
   };
 
-  return (
-    <div className="product-modal" onClick={() => setSelectedProduct(null)}>
-      <div
-        className="product-modal-content"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          className="close-button"
-          type="button"
-          onClick={() => setSelectedProduct(null)}
-        >
-          ✕
-        </button>
-        <button
-          className="modal-wishlist-button"
-          type="button"
-          onClick={handleWishlistToggle}
-          aria-label="Toggle wishlist"
-        >
-          {isSaved ? "♥ Saved" : "♡ Save"}
-        </button>
-        <img
-          className="modal-product-image"
-          src={selectedProduct?.image}
-          alt={selectedProduct?.title}
-        />
-        <h2>{selectedProduct?.title}</h2>
-        <p className="modal-price"> ₹ {selectedProduct?.price}</p>
-        <p className="modal-description"> {selectedProduct?.description}</p>
-        <p className="modal-category"> Category: {selectedProduct?.category}</p>
-        <button
-          className="add-to-cart-button"
-          type="button"
-          onClick={handleAddToCart}
-        >
-          Add to Cart
-        </button>
-      </div>
-    </div>
-  );
+    return (
+        <div className="product-modal" onClick={() => setSelectedProduct(null)}>
+            <div className="product-modal-content" onClick={(e) => e.stopPropagation()}>
+                <button className="close-button" type="button" onClick={() => setSelectedProduct(null)}>✕</button>
+                <button className="modal-wishlist-button" type="button" onClick={handleWishlistToggle} aria-label="Toggle wishlist">
+                    {isSaved ? '♥ Saved' : '♡ Save'}
+                </button>
+                <img className="modal-product-image" src={selectedProduct?.image ?? selectedProduct?.images?.[0]} alt={selectedProduct?.title} />
+                <h2>{selectedProduct?.title}</h2>
+                <p className="modal-price"> ₹ {selectedProduct?.price}</p>
+                <p className="modal-description"> {selectedProduct?.description}</p>
+                <p className="modal-category"> Category: {selectedProduct?.category ?? 'N/A'}</p>
+                <button className="add-to-cart-button" type="button" onClick={handleAddToCart}>Add to Cart</button>
+            </div>
+        </div>
+    );
 }

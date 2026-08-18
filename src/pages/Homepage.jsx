@@ -8,32 +8,83 @@ import ProductModal from "../components/ProductModal/ProductModal";
 import CartDrawer from "../components/CartDrawer/CartDrawer";
 import WishlistPanel from "../components/WishlistPanel/WishlistPanel";
 import Toast from "../components/Toast/Toast";
+import { normalizeProduct } from '../utils/productUtils';
 
 import "./Homepage.css";
 
 export default function HomePage() {
-  const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
-  const [toast, setToast] = useState({
-    message: "",
-    type: "success",
-    visible: false,
-  });
+    const [products, setProducts] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState('all');
+    const [isCartOpen, setIsCartOpen] = useState(false);
+    const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+    const [toast, setToast] = useState({ message: '', type: 'success', visible: false });
 
-  const [searchInput, setSearchInput] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+    const [searchInput, setSearchInput] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    const getHomeData = async () => {
-      try {
-        const response = await axios.get("https://fakestoreapi.com/products");
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Unable to load products:", error);
-      }
+    useEffect(() => {
+        const getHomeData = async () => {
+            try {
+                const response = await axios.get('https://api.escuelajs.co/api/v1/products');
+                const normalizedProducts = response.data.map(normalizeProduct);
+                setProducts(normalizedProducts);
+            } catch (error) {
+                console.error('Unable to load products:', error);
+            }
+        };
+
+        getHomeData();
+    }, []);
+
+    const handleSearch = useCallback((debouncedValue) => {
+        setSearchTerm(debouncedValue.trim());
+    }, []);
+
+    const handleClearSearch = useCallback(() => {
+        setSearchInput('');
+        setSearchTerm('');
+    }, []);
+
+    const displayedProducts = products.filter((product) => {
+        const productCategoryName = product.category?.name ?? product.category;
+        const matchesCategory =
+            selectedCategory === 'all' ||
+            productCategoryName === selectedCategory;
+
+        const normalizedSearch = searchTerm.toLowerCase();
+
+        const matchesSearch =
+            normalizedSearch === '' ||
+            product.title.toLowerCase().includes(normalizedSearch);
+
+        return matchesCategory && matchesSearch;
+    });
+
+    useEffect(() => {
+        if (selectedProduct || isCartOpen || isWishlistOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [selectedProduct, isCartOpen, isWishlistOpen]);
+
+    useEffect(() => {
+        if (!toast.visible) return;
+
+        const timer = setTimeout(() => {
+            setToast((prev) => ({ ...prev, visible: false }));
+        }, 1800);
+
+        return () => clearTimeout(timer);
+    }, [toast.visible]);
+
+    const showToast = (message, type = 'success') => {
+        setToast({ message, type, visible: true });
     };
 
     getHomeData();

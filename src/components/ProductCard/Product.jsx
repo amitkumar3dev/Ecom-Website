@@ -7,6 +7,7 @@ export default function Product({ product, onProductClick, onToast }) {
   const dispatch = useDispatch();
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const isSaved = wishlistItems.some((item) => item.id === product.id);
+  const productImage = product.image ?? product.images?.[0] ?? '';
 
   const handleAddToCart = (event) => {
     event.stopPropagation();
@@ -27,7 +28,7 @@ export default function Product({ product, onProductClick, onToast }) {
       </button>
 
       <div className="product-image-container">
-        <img className="product-image" src={product.image} alt={product.title} />
+        <img className="product-image" src={productImage} alt={product.title} />
       </div>
 
       <div className="product-name">

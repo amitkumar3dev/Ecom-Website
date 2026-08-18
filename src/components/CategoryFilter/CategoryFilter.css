@@ -28,3 +28,18 @@
   background: #2874f0;
   color: white;
 }
+
+.category-btn svg,
+.category-icon {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  object-fit: contain;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.category-btn span {
+  display: inline-block;
+  line-height: 1;
+}

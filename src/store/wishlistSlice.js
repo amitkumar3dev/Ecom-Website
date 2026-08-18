@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { normalizeProduct } from '../utils/productUtils';
+
 const STORAGE_KEY = 'ecom-wishlist-items';
 
 const loadWishlistItems = () => {
   try {
     const savedItems = localStorage.getItem(STORAGE_KEY);
-    return savedItems ? JSON.parse(savedItems) : [];
+    return savedItems ? JSON.parse(savedItems).map(normalizeProduct) : [];
   } catch (error) {
     console.error('Could not load wishlist from localStorage', error);
     return [];
@@ -21,7 +23,7 @@ const wishlistSlice = createSlice({
   initialState,
   reducers: {
     toggleWishlistItem: (state, action) => {
-      const item = action.payload;
+      const item = normalizeProduct(action.payload);
       const existingIndex = state.items.findIndex((savedItem) => savedItem.id === item.id);
 
       if (existingIndex >= 0) {

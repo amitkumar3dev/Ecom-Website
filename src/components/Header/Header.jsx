@@ -2,6 +2,12 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import "./header.css";
 import { useDebounce } from "use-debounce";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../store/authSlice';
+import { useNavigate } from 'react-router-dom';
+import './header.css';
+import { useDebounce } from 'use-debounce';
 
 export default function Header({
   searchInput,
@@ -13,8 +19,18 @@ export default function Header({
 }) {
   const cartItems = useSelector((state) => state.cart.items);
   const wishlistItems = useSelector((state) => state.wishlist.items);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [debouncedSearchInput] = useDebounce(searchInput, 500);
+  const { user, isAuthenticated } = useSelector(
+    (state) => state.auth
+  );
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
+  };
 
   useEffect(() => {
     if (debouncedSearchInput.trim()) {
@@ -33,6 +49,8 @@ export default function Header({
     setSearchInput(value);
   };
 
+  const isMobileSearchOpen = searchInput.length > 0;
+
   return (
     <header className="header">
       <div className="left-section">
@@ -42,14 +60,8 @@ export default function Header({
         </div>
       </div>
 
-      <form className="middle-section" onSubmit={handleSubmit}>
-        <input
-          className="search-bar"
-          type="text"
-          placeholder="Search"
-          value={searchInput}
-          onChange={handleInputChange}
-        />
+      <form className={`middle-section ${isMobileSearchOpen ? 'search-open' : ''}`} onSubmit={handleSubmit}>
+        <input className="search-bar" type="text" placeholder="Search" value={searchInput} onChange={handleInputChange} />
 
         <button
           className="search-button"
@@ -94,6 +106,22 @@ export default function Header({
             <span className="cart-badge">{cartItems.length}</span>
           )}
         </button>
+
+        {isAuthenticated ? (
+          <>
+            <span>Hello, {user.name}</span>
+
+            <button type="button" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <button
+            type="button" className="login-link"
+            onClick={() => navigate('/login')}
+          >
+            Login
+          </button> )}
       </div>
     </header>
   );
