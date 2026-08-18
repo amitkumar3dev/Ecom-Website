@@ -15,22 +15,22 @@ import "./Homepage.css";
 export default function HomePage() {
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState('all');
+    const [selectedCategory, setSelectedCategory] = useState("all");
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isWishlistOpen, setIsWishlistOpen] = useState(false);
-    const [toast, setToast] = useState({ message: '', type: 'success', visible: false });
+    const [toast, setToast] = useState({ message: "", type: "success", visible: false });
 
-    const [searchInput, setSearchInput] = useState('');
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchInput, setSearchInput] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         const getHomeData = async () => {
             try {
-                const response = await axios.get('https://api.escuelajs.co/api/v1/products');
+                const response = await axios.get("https://api.escuelajs.co/api/v1/products");
                 const normalizedProducts = response.data.map(normalizeProduct);
                 setProducts(normalizedProducts);
             } catch (error) {
-                console.error('Unable to load products:', error);
+                console.error("Unable to load products:", error);
             }
         };
 
@@ -42,20 +42,18 @@ export default function HomePage() {
     }, []);
 
     const handleClearSearch = useCallback(() => {
-        setSearchInput('');
-        setSearchTerm('');
+        setSearchInput("");
+        setSearchTerm("");
     }, []);
 
     const displayedProducts = products.filter((product) => {
         const productCategoryName = product.category?.name ?? product.category;
         const matchesCategory =
-            selectedCategory === 'all' ||
-            productCategoryName === selectedCategory;
+            selectedCategory === "all" || productCategoryName === selectedCategory;
 
         const normalizedSearch = searchTerm.toLowerCase();
-
         const matchesSearch =
-            normalizedSearch === '' ||
+            normalizedSearch === "" ||
             product.title.toLowerCase().includes(normalizedSearch);
 
         return matchesCategory && matchesSearch;
@@ -63,13 +61,13 @@ export default function HomePage() {
 
     useEffect(() => {
         if (selectedProduct || isCartOpen || isWishlistOpen) {
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = "hidden";
         } else {
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = "auto";
         }
 
         return () => {
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = "auto";
         };
     }, [selectedProduct, isCartOpen, isWishlistOpen]);
 
@@ -83,117 +81,66 @@ export default function HomePage() {
         return () => clearTimeout(timer);
     }, [toast.visible]);
 
-    const showToast = (message, type = 'success') => {
+    const showToast = (message, type = "success") => {
         setToast({ message, type, visible: true });
     };
 
-    getHomeData();
-  }, []);
+    return (
+        <>
+            <Header
+                searchInput={searchInput}
+                setSearchInput={setSearchInput}
+                handleSearch={handleSearch}
+                handleClearSearch={handleClearSearch}
+                onCartToggle={() => setIsCartOpen(true)}
+                onWishlistToggle={() => setIsWishlistOpen(true)}
+            />
 
-  const handleSearch = useCallback((debouncedValue) => {
-    setSearchTerm(debouncedValue.trim());
-  }, []);
+            <CategoryFilter
+                products={products}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+            />
 
-  const handleClearSearch = useCallback(() => {
-    setSearchInput("");
-    setSearchTerm("");
-  }, []);
+            <div className="home-page">
+                {displayedProducts.length > 0 ? (
+                    <ProductsGrid
+                        products={displayedProducts}
+                        onProductClick={setSelectedProduct}
+                        onToast={showToast}
+                    />
+                ) : (
+                    <p className="no-results">
+                        No products found
+                        {searchTerm && ` for "${searchTerm}"`}
+                        {selectedCategory !== "all" && ` in ${selectedCategory}`}. 
+                    </p>
+                )}
+            </div>
 
-  const displayedProducts = products.filter((product) => {
-    const matchesCategory =
-      selectedCategory === "all" || product.category === selectedCategory;
+            {selectedProduct && (
+                <ProductModal
+                    selectedProduct={selectedProduct}
+                    setSelectedProduct={setSelectedProduct}
+                    onToast={showToast}
+                />
+            )}
 
-    const normalizedSearch = searchTerm.toLowerCase();
-
-    const matchesSearch =
-      normalizedSearch === "" ||
-      product.title.toLowerCase().includes(normalizedSearch);
-
-    return matchesCategory && matchesSearch;
-  });
-
-  useEffect(() => {
-    if (selectedProduct || isCartOpen || isWishlistOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [selectedProduct, isCartOpen, isWishlistOpen]);
-
-  useEffect(() => {
-    if (!toast.visible) return;
-
-    const timer = setTimeout(() => {
-      setToast((prev) => ({ ...prev, visible: false }));
-    }, 1800);
-
-    return () => clearTimeout(timer);
-  }, [toast.visible]);
-
-  const showToast = (message, type = "success") => {
-    setToast({ message, type, visible: true });
-  };
-
-  return (
-    <>
-      <Header
-        searchInput={searchInput}
-        setSearchInput={setSearchInput}
-        handleSearch={handleSearch}
-        handleClearSearch={handleClearSearch}
-        onCartToggle={() => setIsCartOpen(true)}
-        onWishlistToggle={() => setIsWishlistOpen(true)}
-      />
-
-      <CategoryFilter
-        products={products}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
-
-      <div className="home-page">
-        {displayedProducts.length > 0 ? (
-          <ProductsGrid
-            products={displayedProducts}
-            onProductClick={setSelectedProduct}
-            onToast={showToast}
-          />
-        ) : (
-          <p className="no-results">
-            No products found
-            {searchTerm && ` for "${searchTerm}"`}
-            {selectedCategory !== "all" && ` in ${selectedCategory}`}.
-          </p>
-        )}
-      </div>
-
-      {selectedProduct && (
-        <ProductModal
-          selectedProduct={selectedProduct}
-          setSelectedProduct={setSelectedProduct}
-          onToast={showToast}
-        />
-      )}
-
-      <CartDrawer
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        onToast={showToast}
-      />
-      <WishlistPanel
-        isOpen={isWishlistOpen}
-        onClose={() => setIsWishlistOpen(false)}
-        onToast={showToast}
-      />
-      <Toast
-        message={toast.message}
-        type={toast.type}
-        isVisible={toast.visible}
-      />
-    </>
-  );
+            <CartDrawer
+                isOpen={isCartOpen}
+                onClose={() => setIsCartOpen(false)}
+                onToast={showToast}
+            />
+            <WishlistPanel
+                isOpen={isWishlistOpen}
+                onClose={() => setIsWishlistOpen(false)}
+                onToast={showToast}
+            />
+            <Toast
+                message={toast.message}
+                type={toast.type}
+                isVisible={toast.visible}
+            />
+        </>
+    );
 }
