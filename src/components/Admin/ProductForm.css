@@ -1,0 +1,55 @@
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.product-form-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(33, 33, 33);
+}
+
+.product-form-label input,
+.product-form-label select,
+.product-form-label textarea {
+  font-weight: normal;
+  padding: 8px 10px;
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.product-form-label textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.product-form-error {
+  color: rgb(200, 35, 35);
+  font-size: 13px;
+  margin: 0;
+}
+
+.product-form .add-to-cart-button {
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.product-form .add-to-cart-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-product-image {
+  width: 80%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
